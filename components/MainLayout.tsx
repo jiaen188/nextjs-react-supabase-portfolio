@@ -2,6 +2,18 @@ import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { PlusIcon } from "@radix-ui/react-icons";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
 import SideNavigation from "./SideNavigation";
 
 export default async function MainLayout({
@@ -34,7 +46,49 @@ export default async function MainLayout({
       <SideNavigation></SideNavigation>
       <section className="w-8/12">
         <header className="p-5 border-b">
-          <h1>navigation header</h1>
+          <div className="container flex justify-between">
+            <div></div>
+            <div className="flex gap-6 justify-center">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant={"outline"}>
+                    <PlusIcon className="mr-2" /> Create
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-40" align="end">
+                  <Link href={"/admin/projects/create"}>
+                    <DropdownMenuItem className="text-gray-500 cursor-pointer">
+                      Project
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link href={"/admin/blogs/create"}>
+                    <DropdownMenuItem className="text-gray-500 cursor-pointer">
+                      Blog
+                    </DropdownMenuItem>
+                  </Link>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Avatar>
+                    <AvatarImage
+                      src="https://github.com/shadcn.png"
+                      alt="@shadcn"
+                    />
+                    <AvatarFallback>{user?.email?.[0]}</AvatarFallback>
+                  </Avatar>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end">
+                  <DropdownMenuItem>{user?.email}</DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    Log out
+                    <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </div>
         </header>
         <div className="px-5 py-2">{children}</div>
       </section>
