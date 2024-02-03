@@ -32,7 +32,12 @@ export default async function MainLayout({
   return (
     <main className="flex">
       <SideNavigation></SideNavigation>
-      <section className="w-8/12 p-4">{children}</section>
+      <section className="w-8/12">
+        <header className="p-5 border-b">
+          <h1>navigation header</h1>
+        </header>
+        <div className="px-5 py-2">{children}</div>
+      </section>
     </main>
   );
 

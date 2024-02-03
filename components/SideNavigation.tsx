@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { RocketIcon, ReaderIcon, HomeIcon } from "@radix-ui/react-icons";
 
 export default function SideNavigation() {
   return (
@@ -11,6 +12,7 @@ export default function SideNavigation() {
               href={"/admin"}
               className={` hover:bg-gray-100 px-3 py-2 rounded text-gray-600 hover:text-gray-800 flex items-center gap-2`}
             >
+              <HomeIcon />
               Home
             </Link>
           </li>
@@ -19,6 +21,7 @@ export default function SideNavigation() {
               href={"/admin/projects"}
               className={` hover:bg-gray-100 px-3 py-2 rounded text-gray-600 hover:text-gray-800 flex items-center gap-2`}
             >
+              <RocketIcon />
               Projects
             </Link>
           </li>
@@ -27,6 +30,7 @@ export default function SideNavigation() {
               href={"/admin/blogs"}
               className={` hover:bg-gray-100 px-3 py-2 rounded text-gray-600 hover:text-gray-800 flex items-center gap-2`}
             >
+              <ReaderIcon />
               Blogs
             </Link>
           </li>
