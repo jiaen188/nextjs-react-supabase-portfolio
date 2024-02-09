@@ -95,7 +95,7 @@ export default function blogsPage() {
             >
               <div>
                 <Link
-                  href={`/blogs/${blog.id}`}
+                  href={`/admin/blogs/${blog.id}`}
                   className="text-2xl font-normal text-blue-400"
                 >
                   {blog.title}
