@@ -30,7 +30,7 @@ export async function PATCH(request: Request) {
   const supabase = createClient(cookieStore)
   const data = await request.json()
   const {searchParams} = new URL(request.url)
-  const id = searchParams.get('id')
+  const id = searchParams.get('id') || ''
   const response = await supabase.from('blogs').update(data).eq('id', id).select().single()
 
   return Response.json(response)

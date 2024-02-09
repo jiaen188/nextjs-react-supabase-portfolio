@@ -45,7 +45,7 @@ export default function BlogForm({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ id, ...blogForm }),
+        body: JSON.stringify(blogForm),
       });
     } else {
       req = await fetch("/api/blogs", {
