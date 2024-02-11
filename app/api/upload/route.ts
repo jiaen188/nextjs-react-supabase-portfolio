@@ -12,7 +12,7 @@ export async function POST(request: Request) {
 
   await supabase.storage.from(bucketName).upload(fileName, file)
 
-  const {data} = supabase.storage.from(bucketName).getPublicUrl(fileName)
+  const { data } = supabase.storage.from(bucketName).getPublicUrl(fileName)
  
   return Response.json({
     url: data.publicUrl
