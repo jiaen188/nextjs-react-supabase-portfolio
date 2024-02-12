@@ -1,9 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useReducer, useState } from "react";
+import {
+  ChangeEvent,
+  useCallback,
+  useEffect,
+  useReducer,
+  useState,
+} from "react";
 import { Button } from "@/components/ui/button";
-import { ReloadIcon, TrashIcon } from "@radix-ui/react-icons";
+import {
+  MagnifyingGlassIcon,
+  ReloadIcon,
+  TrashIcon,
+} from "@radix-ui/react-icons";
 import {
   Dialog,
   DialogContent,
@@ -13,11 +23,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import { Blog } from "@/type";
+import debounce from "lodash.debounce";
 
 interface Response {
   data: Blog[];
   loading: boolean;
+  searchTerm: string;
 }
 
 export default function blogsPage() {
@@ -30,13 +43,15 @@ export default function blogsPage() {
     {
       data: [],
       loading: true,
+      searchTerm: "",
     }
   );
 
-  const fetchBlogs = async () => {
-    const res = await fetch("/api/blogs");
-    const response = await res.json();
-    setResponse({ data: response.data, loading: false });
+  const fetchBlogs = async (searchTerm = "") => {
+    const res = await fetch(`/api/blogs?term=${searchTerm}`).then((res) =>
+      res.json()
+    );
+    setResponse({ ...response, data: res.data, loading: false });
   };
 
   const blogDelete = async (id: string) => {
@@ -55,6 +70,16 @@ export default function blogsPage() {
     setIsLoading(false);
   };
 
+  const debounceAPI = useCallback(
+    debounce((value: string) => fetchBlogs(value), 1000),
+    []
+  );
+
+  const onChangeSearchTerm = (e: ChangeEvent<HTMLInputElement>) => {
+    setResponse({ ...response, searchTerm: e.target.value });
+    debounceAPI(e.target.value);
+  };
+
   useEffect(() => {
     fetchBlogs();
   }, []);
@@ -62,7 +87,15 @@ export default function blogsPage() {
   return (
     <>
       <div className="flex mb-5">
-        <div>{/* <h2 className="text-2xl font-bold">Blogs</h2> */}</div>
+        <div className="relative">
+          <MagnifyingGlassIcon className="absolute top-[10px] left-[10px] text-gray-400" />
+          <Input
+            type="text"
+            placeholder="Enter blog title"
+            className="pl-8"
+            onChange={onChangeSearchTerm}
+          />
+        </div>
       </div>
       {response.loading ? (
         <div className="animate-pulse">

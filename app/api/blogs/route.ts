@@ -7,10 +7,11 @@ export async function GET(request: Request) {
   const supabase = createClient(cookieStore)
   const {searchParams} = new URL(request.url)
   const id = searchParams.get('id')
+  const term = searchParams.get("term") || "";
   if (id) {
     response = await supabase.from('blogs').select().eq('id', id).single()
   } else {
-    response = await supabase.from('blogs').select().limit(20)
+    response = await supabase.from("blogs").select().ilike('title', `%${term}%`).limit(20)
   }
 
   return Response.json(response)
