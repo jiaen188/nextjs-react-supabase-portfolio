@@ -9,15 +9,7 @@ import { ChangeEvent, useCallback, useReducer, useState } from "react";
 import { useRouter } from "next/navigation";
 import Select from "react-select";
 import { Textarea } from "@/components/ui/textarea";
-
-interface Blog {
-  id?: string;
-  title: string;
-  description?: string;
-  content: string;
-  tags: string[];
-  cover_url: "";
-}
+import { Blog } from "@/type";
 
 const blogsTags = [
   {
@@ -37,12 +29,16 @@ const blogsTags = [
   },
 ];
 
+type Variants = "blog" | "project";
+
 export default function BlogForm({
   id,
   value,
+  variant = "blog",
 }: {
   id?: string;
-  value?: Blog | null;
+  variant?: Variants;
+  value?: Blog;
 }) {
   const router = useRouter();
 
@@ -61,7 +57,7 @@ export default function BlogForm({
     setBlogForm({ ...blogForm, content: data?.getJSON() });
   }, []);
 
-  const onSubmit = async () => {
+  const onSubmitBlog = async () => {
     let req;
     if (id) {
       req = await fetch(`/api/blogs?id=${id}`, {
@@ -87,6 +83,33 @@ export default function BlogForm({
     }
   };
 
+  const onSubmitProject = async () => {
+    console.log("project...", id, blogForm);
+    let req;
+    if (id) {
+      req = await fetch(`/api/projects?id=${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(blogForm),
+      });
+    } else {
+      req = await fetch("/api/projects", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(blogForm),
+      });
+    }
+
+    const response = await req.json();
+    if (response?.data?.id) {
+      router.push("/admin/projects");
+    }
+  };
+
   const uploadCoverImage = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = (e.target as HTMLInputElement).files?.[0];
     console.log("upload...", file, file?.type, file?.name);
@@ -107,27 +130,37 @@ export default function BlogForm({
   return (
     <>
       <div>
-        <Label htmlFor="title">Title</Label>
+        <Label htmlFor="title" className="capitalize">
+          {" "}
+          {variant} Title
+        </Label>
         <Input
           type="text"
           placeholder="title"
           value={blogForm.title}
           onChange={(e) => setBlogForm({ ...blogForm, title: e.target.value })}
+          className="mt-2"
         />
       </div>
       <div className=" mt-5">
-        <Label htmlFor="description">Description</Label>
+        <Label htmlFor="description" className="capitalize">
+          {" "}
+          {variant} Description
+        </Label>
         <Textarea
           placeholder="description"
           value={blogForm.description}
           onChange={(e: { target: { value: any } }) =>
             setBlogForm({ ...blogForm, description: e.target.value })
           }
+          className="mt-2"
         />
       </div>
       <div className="mt-5">
         <div className="grid w-full max-w-sm items-center gap-1.5">
-          <Label htmlFor="picture">Cover Image</Label>
+          <Label htmlFor="picture" className="capitalize">
+            {variant} Cover Image
+          </Label>
           <div className="max-w-[120px]">
             {blogForm.cover_url && (
               <img
@@ -140,7 +173,9 @@ export default function BlogForm({
         </div>
       </div>
       <div className=" mt-5">
-        <Label htmlFor="content">Content</Label>
+        <Label htmlFor="content" className="capitalize">
+          {variant} Content
+        </Label>
         <Editor
           editorProps={{}}
           onDebouncedUpdate={updateContent}
@@ -150,11 +185,13 @@ export default function BlogForm({
         ></Editor>
       </div>
       <div className="mt-4">
-        <Label htmlFor="tags">blog Tags</Label>
+        <Label htmlFor="tags" className="capitalize">
+          {variant} Tags
+        </Label>
         <Select
           isMulti
           name="tags"
-          value={blogForm.tags?.map((item) => ({
+          value={blogForm?.tags?.map((item) => ({
             name: item,
             label: item,
             value: item,
@@ -168,8 +205,22 @@ export default function BlogForm({
         ></Select>
       </div>
       <div className="mt-4 text-right">
-        <Button variant={"secondary"}>Cancel</Button>
-        <Button className="ml-5" onClick={onSubmit}>
+        <Button
+          variant={"secondary"}
+          onClick={() => {
+            variant === "blog"
+              ? router.push("/admin/blogs")
+              : router.push("/admin/projects");
+          }}
+        >
+          Cancel
+        </Button>
+        <Button
+          className="ml-5"
+          onClick={() =>
+            variant === "blog" ? onSubmitBlog() : onSubmitProject()
+          }
+        >
           <CheckIcon className="mr-2" />
           Save
         </Button>

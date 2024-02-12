@@ -29,8 +29,8 @@ export default function Page({ params }: BlogDetailProps) {
   );
 
   const fetchData = async () => {
-    const response = await fetch(`/api/blogs?id=${params.slug}`).then((res) =>
-      res.json()
+    const response = await fetch(`/api/projects?id=${params.slug}`).then(
+      (res) => res.json()
     );
 
     if (response.status === 200) {
@@ -46,5 +46,11 @@ export default function Page({ params }: BlogDetailProps) {
     return <h1>loading...</h1>;
   }
 
-  return <BlogForm id={params.slug} value={response.data as Blog} />;
+  return (
+    <BlogForm
+      id={params.slug}
+      value={response.data as Blog}
+      variant="project"
+    />
+  );
 }
