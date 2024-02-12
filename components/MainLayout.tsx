@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import SideNavigation from "./SideNavigation";
+import NavigationHeading from "./NavigationHeading";
 
 export default async function MainLayout({
   children,
@@ -46,8 +47,10 @@ export default async function MainLayout({
       <SideNavigation></SideNavigation>
       <section className="w-8/12">
         <header className="p-5 border-b">
-          <div className="container flex justify-between">
-            <div></div>
+          <div className="container flex justify-between items-center">
+            <div>
+              <NavigationHeading></NavigationHeading>
+            </div>
             <div className="flex gap-6 justify-center">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>

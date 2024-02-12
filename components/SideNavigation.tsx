@@ -1,16 +1,30 @@
+"use client";
+
 import Link from "next/link";
 import { RocketIcon, ReaderIcon, HomeIcon } from "@radix-ui/react-icons";
+import { usePathname } from "next/navigation";
 
 export default function SideNavigation() {
+  const path = usePathname();
+
   return (
     <aside className="w-4/12 border-r border-gray-300 h-screen p-4">
-      <h1 className="font-bold text-lg">portfolio admin</h1>
+      <div>
+        <Link href={"/admin"}>
+          <h1 className="font-bold text-2xl uppercase space-x-3 px-4">
+            Portfolio
+          </h1>
+          <h1 className="font-normal text-sm text-gray-400 px-4">ADMIN</h1>
+        </Link>
+      </div>
       <div className="mt-5">
         <ul>
           <li className="mb-2">
             <Link
               href={"/admin"}
-              className={` hover:bg-gray-100 px-3 py-2 rounded text-gray-600 hover:text-gray-800 flex items-center gap-2`}
+              className={`${
+                path === "/admin" ? "bg-gray-100" : ""
+              } hover:bg-gray-100 px-3 py-2 rounded text-gray-600 hover:text-gray-800 flex items-center gap-2`}
             >
               <HomeIcon />
               Home
@@ -19,7 +33,9 @@ export default function SideNavigation() {
           <li className="mb-2">
             <Link
               href={"/admin/projects"}
-              className={` hover:bg-gray-100 px-3 py-2 rounded text-gray-600 hover:text-gray-800 flex items-center gap-2`}
+              className={`${
+                path === "/admin/projects" ? "bg-gray-100" : ""
+              } hover:bg-gray-100 px-3 py-2 rounded text-gray-600 hover:text-gray-800 flex items-center gap-2`}
             >
               <RocketIcon />
               Projects
@@ -28,7 +44,9 @@ export default function SideNavigation() {
           <li className="mb-2">
             <Link
               href={"/admin/blogs"}
-              className={` hover:bg-gray-100 px-3 py-2 rounded text-gray-600 hover:text-gray-800 flex items-center gap-2`}
+              className={`${
+                path === "/admin/blogs" ? "bg-gray-100" : ""
+              } hover:bg-gray-100 px-3 py-2 rounded text-gray-600 hover:text-gray-800 flex items-center gap-2`}
             >
               <ReaderIcon />
               Blogs

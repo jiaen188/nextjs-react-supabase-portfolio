@@ -62,9 +62,7 @@ export default function blogsPage() {
   return (
     <>
       <div className="flex mb-5">
-        <div>
-          <h2 className="text-2xl font-bold">Projects</h2>
-        </div>
+        <div>{/* <h2 className="text-2xl font-bold">Projects</h2> */}</div>
       </div>
       {response.loading ? (
         <div className="animate-pulse">
